@@ -1,0 +1,29 @@
+# API Docs:
+# https://api.wikimedia.org/wiki/Core_REST_API/Reference/Search/Search_content
+
+label: wikipedia-search
+processors:
+  - mutation: |
+      meta limit = @limit.number(50)
+      meta limit = [ @limit, 100 ].min()
+      meta limit = [ @limit, 1 ].max()
+
+      meta query_string = "q=%v&limit=%v".format(content().escape_url_query(), @limit)
+
+      root = ""
+  - http:
+      url: "https://api.wikimedia.org/core/v1/wikipedia/en/search/page?${! @query_string }"
+      verb: GET
+  - mapping: 'root = this.pages'
+  - unarchive:
+      format: json_array
+
+meta:
+  mcp:
+    enabled: true
+    description: Search for Wikipedia articles with a string of terms.
+    properties:
+      - name: limit
+        type: number
+        description: "An optional limit of articles to search for, between 1 and 100 inclusive. Defaults to 50."
+

@@ -1,0 +1,17 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'benthos-benchmark'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'rpcn-mcp'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['host.docker.internal:4195']
+

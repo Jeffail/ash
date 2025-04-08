@@ -1,0 +1,9 @@
+label: redis-cache
+redis:
+  url: ${REDIS_URL}
+
+meta:
+  mcp:
+    enabled: true
+    description: A thing
+

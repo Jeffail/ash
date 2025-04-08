@@ -1,0 +1,29 @@
+# API Docs:
+# https://docs.bsky.app/docs/api/app-bsky-feed-search-posts
+
+label: bluesky-search
+processors:
+  - mutation: |
+      meta limit = @limit.number(25)
+      meta limit = [ @limit, 100 ].min()
+      meta limit = [ @limit, 1 ].max()
+
+      meta query_string = "q=%v&limit=%v".format(content().escape_url_query(), @limit)
+
+      root = ""
+  - http:
+      url: "https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?${! @query_string }"
+      verb: GET
+  - mapping: 'root = this.posts'
+  - unarchive:
+      format: json_array
+
+meta:
+  mcp:
+    enabled: true
+    description: Search for bluesky posts with a Lucene style query string.
+    properties:
+      - name: limit
+        type: number
+        description: "An optional limit of posts to search for, between 1 and 100 inclusive. Defaults to 25."
+

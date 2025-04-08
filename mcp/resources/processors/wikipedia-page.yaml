@@ -1,0 +1,17 @@
+# API Docs:
+# https://api.wikimedia.org/wiki/Core_REST_API/Reference/Pages/Get_page_source
+
+label: wikipedia-page
+processors:
+  - mutation: |
+      meta key = content().string()
+      root = ""
+  - http:
+      url: "https://api.wikimedia.org/core/v1/wikipedia/en/page/${! @key }"
+      verb: GET
+
+meta:
+  mcp:
+    enabled: true
+    description: Obtain the contents of a Wikipedia page by its key.
+

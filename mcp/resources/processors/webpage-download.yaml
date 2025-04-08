@@ -1,0 +1,14 @@
+label: webpage-download
+processors:
+  - mutation: |
+      meta url = content().string()
+      root = ""
+  - http:
+      url: "${! @url }"
+      verb: GET
+
+meta:
+  mcp:
+    enabled: true
+    description: Obtain the contents of a web page by its URL.
+

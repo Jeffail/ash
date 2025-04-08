@@ -1,0 +1,38 @@
+# API Docs:
+# https://www.reddit.com/r/redditdev/wiki/api/
+
+label: reddit-search
+processors:
+  - mutation: |
+      meta limit = @limit.number(25)
+      meta limit = [ @limit, 100 ].min()
+      meta limit = [ @limit, 1 ].max()
+
+      meta sub_path = if @subreddit.type() == "string" {
+        "/r/" + @subreddit
+      } else {
+        ""
+      }
+
+      meta query_string = "q=%v&limit=%v".format(content().escape_url_query(), @limit)
+
+      root = ""
+  - http:
+      url: "https://www.reddit.com${! @sub_path }/search.json?${! @query_string }"
+      verb: GET
+  - mapping: 'root = this.data.children.map_each(post -> post.data)'
+  - unarchive:
+      format: json_array
+
+meta:
+  mcp:
+    enabled: true
+    description: Search for Reddit posts with a Lucene style query string.
+    properties:
+      - name: limit
+        type: number
+        description: "An optional limit of posts to search for, between 1 and 100 inclusive. Defaults to 25."
+      - name: subreddit
+        type: string
+        description: "Optionally specify a subreddit to search within, otherwise the entirety of Reddit is searched."
+

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "rpcn": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://localhost:4195/sse"
+      ]
+    }
+  }
+}

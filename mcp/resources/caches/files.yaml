@@ -1,0 +1,9 @@
+label: files-cache
+file:
+  directory: /data
+
+meta:
+  mcp:
+    enabled: true
+    description: A cache that persists data to the local disk.
+
