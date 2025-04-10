@@ -1,0 +1,18 @@
+label: google-doc-by-name
+processors:
+  - google_drive_search:
+      query: 'name = "${! content().string() }"'
+      projection: ["id", "name", "mimeType", "parents", "size"]
+  - mutation: 'meta path = this.name'
+  - google_drive_download:
+      file_id: "${! this.id }"
+      mime_type: "${! this.mimeType }"
+  - mapping: |
+      root.path = @path
+      root.content = content().string()
+
+meta:
+  mcp:
+    enabled: true
+    description: Search for Google files by their name and obtain JSON objects containing the path and the content.
+
