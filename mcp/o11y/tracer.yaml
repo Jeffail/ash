@@ -1,0 +1,4 @@
+open_telemetry_collector:
+  grpc:
+    - address: localhost:4317
+      secure: false

@@ -62,3 +62,7 @@ mcphost --config ./config/mcphost.json -m ollama:mistral:latest
 
 Your prometheus and grafana instances should be running in the background whilst you use your AI of choice. In order to view an example dashboard open up grafana at `http://localhost:3000` and use the credentials `admin`/`admin` to access a dashboard called `RPCN MCP Server`.
 
+## Example Prompts
+
+- [INST]Search bluesky for dog related posts and then summarise each one as if it were written by a jealous cat[/INST]
+

@@ -31,6 +31,13 @@ services:
     env_file:
       - ./config/grafana/config.monitoring
 
+  jaeger:
+    image: jaegertracing/jaeger:latest
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+
   redis:
     image: redis:latest
     ports:
