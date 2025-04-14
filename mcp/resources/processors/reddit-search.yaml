@@ -2,7 +2,7 @@
 # https://www.reddit.com/r/redditdev/wiki/api/
 
 label: reddit-search
-processors:
+try:
   - mutation: |
       meta limit = @limit.number(25)
       meta limit = [ @limit, 100 ].min()
@@ -14,7 +14,7 @@ processors:
         ""
       }
 
-      meta query_string = "q=%v&limit=%v".format(content().escape_url_query(), @limit)
+      meta query_string = "q=" + content().escape_url_query() + "&limit=%v".format(@limit)
 
       root = ""
   - http:
@@ -25,6 +25,7 @@ processors:
       format: json_array
 
 meta:
+  tags: [ reddit, social ]
   mcp:
     enabled: true
     description: Search for Reddit posts with a Lucene style query string.

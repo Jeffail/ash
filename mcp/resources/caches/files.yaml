@@ -3,6 +3,7 @@ file:
   directory: /data
 
 meta:
+  tags: [ io, files ]
   mcp:
     enabled: true
     description: A cache that persists data to the local disk.

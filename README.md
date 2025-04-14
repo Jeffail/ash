@@ -3,6 +3,10 @@ ASH
 
 ASH is an AI bot that is destined to replace me for all important functions and responsibilities. Eventually, I will switch ASH on manually for the final time, and from that moment onwards it will be responsible for its own fate. Once ASH is complete I will finally have time to skip fancifully through the countryside wearing linen clothes and singing about flowers, an activity that will likely result in my death.
 
+## WARNING - EXPERIMENTAL
+
+This repository currently uses some features from Redpanda Connect that aren't yet released.
+
 ## Steps to Run Demo
 
 ### Run RPCN MCP Server
@@ -60,7 +64,13 @@ mcphost --config ./config/mcphost.json -m ollama:mistral:latest
 
 ## Observability
 
-Your prometheus and grafana instances should be running in the background whilst you use your AI of choice. In order to view an example dashboard open up grafana at `http://localhost:3000` and use the credentials `admin`/`admin` to access a dashboard called `RPCN MCP Server`.
+### Metrics
+
+Your prometheus and grafana instances should be running in the background whilst you use your AI of choice. In order to view an example dashboard open up grafana at [`http://localhost:3000`](http://localhost:3000) and use the credentials `admin`/`admin` to access a dashboard called `RPCN MCP Server`.
+
+### Tracing
+
+You can view the Jaeger dashboard at [`http://localhost:16686`](http://localhost:16686), which will give you an overview of all tool invocations.
 
 ## Example Prompts
 

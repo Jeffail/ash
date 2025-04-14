@@ -2,13 +2,13 @@
 # https://www.reddit.com/r/redditdev/wiki/api/
 
 label: reddit-hot-posts
-processors:
+try:
   - mutation: |
       meta limit = @limit.number(25)
       meta limit = [ @limit, 100 ].min()
       meta limit = [ @limit, 1 ].max()
 
-      meta query_string = "&limit=%v".format(content().escape_url_query(), @limit)
+      meta query_string = content().escape_url_query() + "&limit=%v".format(@limit)
       meta subreddit = content().string()
 
       root = ""
@@ -20,6 +20,7 @@ processors:
       format: json_array
 
 meta:
+  tags: [ reddit, social ]
   mcp:
     enabled: true
     description: Obtain the top hot posts on a specified subreddit.

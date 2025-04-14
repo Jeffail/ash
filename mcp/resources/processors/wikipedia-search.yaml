@@ -2,13 +2,13 @@
 # https://api.wikimedia.org/wiki/Core_REST_API/Reference/Search/Search_content
 
 label: wikipedia-search
-processors:
+try:
   - mutation: |
       meta limit = @limit.number(50)
       meta limit = [ @limit, 100 ].min()
       meta limit = [ @limit, 1 ].max()
 
-      meta query_string = "q=%v&limit=%v".format(content().escape_url_query(), @limit)
+      meta query_string = "q=" + content().escape_url_query() + "&limit=%v".format(@limit)
 
       root = ""
   - http:
@@ -17,8 +17,20 @@ processors:
   - mapping: 'root = this.pages'
   - unarchive:
       format: json_array
+  - branch:
+      request_map: |
+        meta key = this.key
+        root = ""
+      processors:
+        - http:
+            parallel: true
+            url: "https://api.wikimedia.org/core/v1/wikipedia/en/page/${! @key }"
+            verb: GET
+      result_map: |
+        root.content = this
 
 meta:
+  tags: [ wiki ]
   mcp:
     enabled: true
     description: Search for Wikipedia articles with a string of terms.

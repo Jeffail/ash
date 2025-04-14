@@ -3,6 +3,7 @@ redis:
   url: ${REDIS_URL}
 
 meta:
+  tags: [ io, redis ]
   mcp:
     enabled: true
     description: A thing
