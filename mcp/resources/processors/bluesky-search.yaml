@@ -4,11 +4,11 @@
 label: bluesky-search
 try:
   - mutation: |
-      meta limit = @limit.number(25)
-      meta limit = [ @limit, 100 ].min()
-      meta limit = [ @limit, 1 ].max()
+      root.limit = root.limit.number(25)
+      root.limit = [ root.limit, 100 ].min()
+      root.limit = [ root.limit, 1 ].max()
 
-      meta query_string = "q=" + content().escape_url_query() + "&limit=%v".format(@limit)
+      meta query_string = "q=" + root.query.escape_url_query() + "&limit=%v".format(root.limit)
 
       root = ""
   - http:
@@ -22,9 +22,14 @@ meta:
   tags: [ bluesky, social ]
   mcp:
     enabled: true
-    description: Search for bluesky posts with a Lucene style query string.
+    description: Search for bluesky posts.
     properties:
+      - name: query
+        type: string
+        required: true
+        description: "A lucene style query string to search by."
+
       - name: limit
         type: number
-        description: "An optional limit of posts to search for, between 1 and 100 inclusive. Defaults to 25."
+        description: "An optional number of posts to search for, between 1 and 100 inclusive. Defaults to 25."
 

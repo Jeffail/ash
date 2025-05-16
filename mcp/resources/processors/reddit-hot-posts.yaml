@@ -4,12 +4,12 @@
 label: reddit-hot-posts
 try:
   - mutation: |
-      meta limit = @limit.number(25)
-      meta limit = [ @limit, 100 ].min()
-      meta limit = [ @limit, 1 ].max()
+      root.limit = root.limit.number(25)
+      root.limit = [ root.limit, 100 ].min()
+      root.limit = [ root.limit, 1 ].max()
 
-      meta query_string = content().escape_url_query() + "&limit=%v".format(@limit)
-      meta subreddit = content().string()
+      meta query_string = root.query.escape_url_query() + "&limit=%v".format(root.limit)
+      meta subreddit = root.subreddit.string()
 
       root = ""
   - http:
@@ -25,6 +25,16 @@ meta:
     enabled: true
     description: Obtain the top hot posts on a specified subreddit.
     properties:
+      - name: query
+        type: string
+        required: true
+        description: "A lucene style query string to search by."
+
+      - name: subreddit
+        type: string
+        required: true
+        description: "The subreddit to search within."
+
       - name: limit
         type: number
         description: "An optional limit of posts to search for, between 1 and 100 inclusive. Defaults to 25."

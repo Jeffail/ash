@@ -4,11 +4,11 @@
 label: wikipedia-search
 try:
   - mutation: |
-      meta limit = @limit.number(50)
-      meta limit = [ @limit, 100 ].min()
-      meta limit = [ @limit, 1 ].max()
+      root.limit = root.limit.number(50)
+      root.limit = [ root.limit, 100 ].min()
+      root.limit = [ root.limit, 1 ].max()
 
-      meta query_string = "q=" + content().escape_url_query() + "&limit=%v".format(@limit)
+      meta query_string = "q=" + root.query.escape_url_query() + "&limit=%v".format(root.limit)
 
       root = ""
   - http:
@@ -35,6 +35,11 @@ meta:
     enabled: true
     description: Search for Wikipedia articles with a string of terms.
     properties:
+      - name: query
+        type: string
+        required: true
+        description: "A string of search terms."
+
       - name: limit
         type: number
         description: "An optional limit of articles to search for, between 1 and 100 inclusive. Defaults to 50."
